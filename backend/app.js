@@ -12,7 +12,16 @@ import userRoutes from './src/routes/users.routes.js';
 const app = express();
 
 // Middleware
-app.use(cors());
+const allowedOrigins = [
+	process.env.FRONTEND_ORIGIN || 'http://localhost:3000',
+];
+
+app.use(
+	cors({
+		origin: allowedOrigins,
+		credentials: true,
+	})
+);
 app.use(express.json());
 app.use(cookieParser());
 
