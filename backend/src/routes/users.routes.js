@@ -24,8 +24,22 @@ const router = Router();
  *     responses:
  *       200:
  *         description: Preferences
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Preferences'
  *       401:
  *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 
 router.get("/preferences", protect, getPreferences);
@@ -47,8 +61,22 @@ router.get("/preferences", protect, getPreferences);
  *     responses:
  *       200:
  *         description: Updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/PreferencesUpdateResponse'
  *       400:
  *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.put("/preferences", protect, validate(preferenceSchema), updatePreferences);
 

@@ -27,8 +27,16 @@ const router = Router();
  *     responses:
  *       200:
  *         description: Search results
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BookSearchResponse'
  *       400:
  *         description: Missing query
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 
 
@@ -48,6 +56,16 @@ router.get("/search", searchBooks);
  *     responses:
  *       200:
  *         description: Book details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BookSnapshot'
+ *       500:
+ *         description: Error fetching book details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get("/:id", getBookById);
 
@@ -62,8 +80,22 @@ router.get("/:id", getBookById);
  *     responses:
  *       200:
  *         description: Recommended books
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BookSearchResponse'
  *       401:
  *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Error fetching recommendations
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get("/recommendations", protect, getRecommendations);
 
@@ -78,6 +110,18 @@ router.get("/recommendations", protect, getRecommendations);
  *     responses:
  *       200:
  *         description: Saved books
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/BookSnapshot'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get("/saved", protect, getSavedBooks);
 
@@ -94,13 +138,26 @@ router.get("/saved", protect, getSavedBooks);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [bookId]
- *             properties:
- *               bookId: { type: string }
+ *             $ref: '#/components/schemas/SaveBookRequest'
  *     responses:
  *       200:
  *         description: Saved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/MessageResponse'
+ *       400:
+ *         description: Validation error / already saved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.post("/saved", protect, validate(saveBookSchema), saveBook);
 
@@ -115,6 +172,18 @@ router.post("/saved", protect, validate(saveBookSchema), saveBook);
  *     responses:
  *       200:
  *         description: Finished books
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/BookSnapshot'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get("/finished", protect, getFinishedBooks);
 
@@ -131,14 +200,26 @@ router.get("/finished", protect, getFinishedBooks);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [bookId]
- *             properties:
- *               bookId: { type: string }
- *               learningNotes: { type: string }
+ *             $ref: '#/components/schemas/FinishBookRequest'
  *     responses:
  *       200:
  *         description: Marked as finished
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/MessageResponse'
+ *       400:
+ *         description: Validation error / already finished
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.post("/finished", protect, validate(fininshBookSchema), markBookAsFinished);
 
@@ -160,13 +241,26 @@ router.post("/finished", protect, validate(fininshBookSchema), markBookAsFinishe
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [learningNotes]
- *             properties:
- *               learningNotes: { type: string }
+ *             $ref: '#/components/schemas/UpdateLearningNotesRequest'
  *     responses:
  *       200:
  *         description: Updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/MessageResponse'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: Book not found in finished books
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.put("/finished/:bookId/notes", protect, validate(updateLearningNotesSchema), updateLearningNotes);
 
@@ -186,6 +280,16 @@ router.put("/finished/:bookId/notes", protect, validate(updateLearningNotesSchem
  *     responses:
  *       200:
  *         description: Removed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/MessageResponse'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.delete("/saved/:bookId", protect, removeSavedBook);
 
